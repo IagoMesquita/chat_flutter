@@ -5,6 +5,31 @@ class AuthForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('Auth Form');
+    return Card(
+      // color: Colors.white,
+      margin: const EdgeInsets.all(20),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Nome'),
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'E-mail'),
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Senha'),
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton(onPressed: () {}, child: const Text('Entrar')),
+              TextButton(
+                  onPressed: () {}, child: const Text('Criar uma nova conta?'))
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
