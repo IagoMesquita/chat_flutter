@@ -1,4 +1,5 @@
 import 'package:chat_2025/model/auth_form_data.dart';
+import 'package:chat_2025/utils/validate_email.dart';
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
@@ -11,6 +12,15 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm> {
   final _formData = AuthFormData();
 
+  final _formKey = GlobalKey<FormState>();
+
+  void _submit() {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) return;
+
+    print('Formulário válido! Dados: $_formData');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -19,6 +29,7 @@ class _AuthFormState extends State<AuthForm> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               if (_formData.isSignup)
@@ -27,12 +38,20 @@ class _AuthFormState extends State<AuthForm> {
                   decoration: const InputDecoration(labelText: 'Nome'),
                   initialValue: _formData.name,
                   onChanged: (value) => _formData.name = value,
+                  validator: (value) {
+                    final name = value ?? '';
+                    if (name.trim().length < 5) {
+                      return 'Nome deve ter no minimo 5 caracteres.';
+                    }
+                    return null;
+                  },
                 ),
               TextFormField(
                 key: const ValueKey('email'),
                 decoration: const InputDecoration(labelText: 'E-mail'),
                 initialValue: _formData.email,
                 onChanged: (value) => _formData.email = value,
+                validator: (email) => validarEmail(email),
               ),
               TextFormField(
                 key: const ValueKey('password'),
@@ -40,11 +59,19 @@ class _AuthFormState extends State<AuthForm> {
                 decoration: const InputDecoration(labelText: 'Senha'),
                 initialValue: _formData.password,
                 onChanged: (value) => _formData.password = value,
+                validator: (value) {
+                  final password = value ?? '';
+                  if (password.trim().length < 6) {
+                    return 'Senha deve ter no minimo 6 caracteres.';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 12),
               ElevatedButton(
-                  onPressed: () {},
-                  child: Text(_formData.isLogin ? 'Entrar' : 'Cadastrar')),
+                  onPressed: _submit,
+                  child: Text(_formData.isLogin ? 'Entrar' : 'Cadastrar')
+                  ),
               TextButton(
                 child: Text(_formData.isLogin
                     ? 'Criar uma nova conta?'
