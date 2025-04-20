@@ -3,7 +3,9 @@ import 'package:chat_2025/utils/validate_email.dart';
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm({super.key});
+  final void Function(AuthFormData) onSubmit;
+
+  const AuthForm({super.key, required this.onSubmit});
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -11,14 +13,13 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm> {
   final _formData = AuthFormData();
-
   final _formKey = GlobalKey<FormState>();
 
   void _submit() {
     final isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) return;
 
-    print('Formulário válido! Dados: $_formData');
+    widget.onSubmit(_formData);
   }
 
   @override
@@ -70,8 +71,7 @@ class _AuthFormState extends State<AuthForm> {
               const SizedBox(height: 12),
               ElevatedButton(
                   onPressed: _submit,
-                  child: Text(_formData.isLogin ? 'Entrar' : 'Cadastrar')
-                  ),
+                  child: Text(_formData.isLogin ? 'Entrar' : 'Cadastrar')),
               TextButton(
                 child: Text(_formData.isLogin
                     ? 'Criar uma nova conta?'
