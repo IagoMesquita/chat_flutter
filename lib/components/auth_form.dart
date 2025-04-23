@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_2025/components/user_image_picker.dart';
-import 'package:chat_2025/model/auth_form_data.dart';
+import 'package:chat_2025/core/model/auth_form_data.dart';
 import 'package:chat_2025/utils/validate_email.dart';
 import 'package:flutter/material.dart';
 
