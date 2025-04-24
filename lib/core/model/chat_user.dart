@@ -4,7 +4,7 @@ class ChatUser {
   final String email;
   final String imageURL;
 
-  const ChatUser({
+  ChatUser({
     required this.id,
     required this.name,
     required this.email,

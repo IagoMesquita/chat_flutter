@@ -1,5 +1,6 @@
-import 'package:chat_2025/components/auth_form.dart';
-import 'package:chat_2025/model/auth_form_data.dart';
+import 'package:chat_2025/core/service/auth/auth_service.dart';
+import 'package:chat_2025/widgets/auth_form.dart';
+import 'package:chat_2025/core/model/auth_form_data.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
@@ -12,19 +13,35 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   bool _isLoading = false;
 
-  void _handleSubmit(AuthFormData formData) {
-    setState(() {
-      _isLoading = true;
-    });
+  Future<void> _handleSubmit(AuthFormData formData) async {
+    try {
+      setState(() => _isLoading = true);
 
-    print('AuthPage....');
-    print('Nome:  ${formData.name}');
-    print('Email:  ${formData.email}');
-    print('Senha:  ${formData.password}');
+      if (formData.isLogin) {
+        // Login
+        AuthService().login(
+          formData.email,
+          formData.password,
+        );
+      } else {
+        // Singnup
+        AuthService().singnup(
+          formData.name,
+          formData.email,
+          formData.password,
+          formData.image,
+        );
+      }
 
-    // setState(() {
-    //   _isLoading = false;
-    // });
+      print('AuthPage....');
+      print('Nome:  ${formData.name}');
+      print('Email:  ${formData.email}');
+      print('Senha:  ${formData.password}');
+    } catch (e) {
+      // Tratar erro!
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
