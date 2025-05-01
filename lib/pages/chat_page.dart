@@ -1,7 +1,13 @@
+import 'dart:math';
+
+import 'package:chat_2025/core/model/chat_notification.dart';
 import 'package:chat_2025/core/service/auth/auth_service.dart';
+import 'package:chat_2025/core/service/notification/chat_notification_service.dart';
+import 'package:chat_2025/pages/notification_page.dart';
 import 'package:chat_2025/widgets/messages.dart';
 import 'package:chat_2025/widgets/new_message.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({super.key});
@@ -21,30 +27,64 @@ class ChatPage extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
         actions: [
-          DropdownButton(
-            icon: const Icon(
-              Icons.more_vert,
-              color: Colors.white,
+          DropdownButtonHideUnderline(
+            child: DropdownButton(
+              icon: const Icon(
+                Icons.more_vert,
+                color: Colors.white,
+              ),
+              items: const [
+                DropdownMenuItem(
+                    value: 'logout',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.exit_to_app,
+                          color: Colors.black87,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text('Sair')
+                      ],
+                    ))
+              ],
+              onChanged: (value) {
+                if (value == 'logout') {
+                  AuthService().logout();
+                }
+              },
             ),
-            items: const [
-              DropdownMenuItem(
-                  value: 'logout',
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.exit_to_app,
-                        color: Colors.black87,
-                      ),
-                      SizedBox(width: 10,),
-                      Text('Sair')
-                    ],
-                  ))
+          ),
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                    return const NotificationPage();
+                  }));
+                },
+              ),
+              Positioned(
+                top: 5,
+                right: 5,
+                child: CircleAvatar(
+                  maxRadius: 10,
+                  backgroundColor: Colors.red.shade800,
+                  child: Text(
+                    '${Provider.of<ChatNotificationService>(context).itemsCount}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ],
-            onChanged: (value) {
-              if(value == 'logout') {
-                AuthService().logout();
-              }
-            },
           )
         ],
       ),
@@ -57,6 +97,16 @@ class ChatPage extends StatelessWidget {
           ],
         ),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: const Icon(Icons.add),
+      //   onPressed: () {
+      //     Provider.of<ChatNotificationService>(context, listen: false)
+      //         .add(ChatNotification(
+      //       title: 'Mais uma notificacao',
+      //       body: Random().nextDouble().toString(),
+      //     ));
+      //   },
+      // ),
     );
   }
 }
