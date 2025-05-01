@@ -8,6 +8,10 @@ class ChatNotificationService with ChangeNotifier {
     return [..._items];
   }
 
+  int get itemsCount {
+    return _items.length;
+  }
+
   void add(ChatNotification notification) {
     _items.add(notification);
     notifyListeners();
@@ -15,5 +19,6 @@ class ChatNotificationService with ChangeNotifier {
 
   void remove(int i) {
     _items.removeAt(i);
+    notifyListeners();
   }
 }
